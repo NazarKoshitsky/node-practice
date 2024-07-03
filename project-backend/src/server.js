@@ -40,7 +40,7 @@ const startServer = () => {
         return res.status(404).json({
           message: `Movie with id=${id} not found`,
         });
-      }
+      } 
 
       res.json({
         status: 200,
