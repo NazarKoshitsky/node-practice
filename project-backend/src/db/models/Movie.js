@@ -17,7 +17,6 @@ const movieShema = new Schema({
 });
 
 const Movie = model("movie", movieShema);
-// category => categories
-// mouse => mice
+
 
 export default Movie;

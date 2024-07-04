@@ -31,27 +31,26 @@ const startServer = () => {
   });
 
   app.get('/api/movies/:id', async (req, res) => {
+    const { id } = req.params;
+
+    const data = await getMovieById(id);
+
     try {
-      const { id } = req.params;
-
-      const data = await getMovieById(id);
-
       if (!data) {
         return res.status(404).json({
           message: `Movie with id=${id} not found`,
         });
-      } 
-
+      }
       res.json({
         status: 200,
         data,
         message: `Contact with id=${id} find success`,
       });
     } catch (error) {
-      if (error.message.includes('Cast to ObjectId failed')) {
+      if(error.message.includes('Cast to ObjectId failed')){
         error.status = 404;
       }
-      const { status = 500 } = error;
+      const {status = 500} = error;
       res.status(status).json({
         message: error.message,
       });
