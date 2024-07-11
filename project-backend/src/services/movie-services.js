@@ -8,7 +8,6 @@ export const addMovie = (data) => Movie.create(data);
 
 export const upsertMovie = async (filter, data, options = {}) => {
   const result = await Movie.findOneAndUpdate(filter, data, {
-    new: true,
     includeResultMetadata: true,
     ...options,
   });

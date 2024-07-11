@@ -1,4 +1,9 @@
 import { Schema, model } from 'mongoose';
+import {
+  typeList,
+  releaseYearRegexp,
+} from '../../constants/movies-constants.js';
+import { mongooseSaveError, setUpdateSettings } from './hooks.js';
 
 const movieShema = new Schema(
   {
@@ -12,12 +17,21 @@ const movieShema = new Schema(
     },
     type: {
       type: String,
-      enum: ['film', 'serial'],
+      enum: typeList,
       default: 'film',
+    },
+    releaseYear: {
+      type: String,
+      match: releaseYearRegexp,
+      required: true,
     },
   },
   { versionKey: false, timestamps: true },
 );
+
+movieShema.post('save', mongooseSaveError);
+movieShema.post('findOneAndUpdate', mongooseSaveError);
+movieShema.pre('findOneAndUpdate', setUpdateSettings);
 
 const Movie = model('movie', movieShema);
 
