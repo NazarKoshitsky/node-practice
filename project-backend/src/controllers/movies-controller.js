@@ -7,8 +7,15 @@ import {
   deleteMovie,
 } from '../services/movie-services.js';
 
+import parsePaginationParams from '../utils/parsePaginationParams.js';
+
 export const getAllMoviesController = async (req, res) => {
-  const data = await getMovies();
+  const { query } = req;
+  const { page, perPage } = parsePaginationParams(query);
+  const data = await getMovies({
+    page,
+    perPage,
+  });
 
   res.json({
     status: 200,

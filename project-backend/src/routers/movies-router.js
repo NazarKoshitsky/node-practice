@@ -11,7 +11,10 @@ import ctrlWrapper from '../utils/ctrlWrapper.js';
 import validateBody from '../utils/validateBody.js';
 
 import isValidId from '../middlewares/isValidId.js';
-import { movieAddSchema } from '../validation/movie-schemas.js';
+import {
+  movieAddSchema,
+  movieUpdateSchema,
+} from '../validation/movie-schemas.js';
 
 const moviesRouter = express.Router();
 
@@ -25,9 +28,19 @@ moviesRouter.post(
   ctrlWrapper(addMovieController),
 );
 
-moviesRouter.put('/:id', isValidId, ctrlWrapper(updateMovieController));
+moviesRouter.put(
+  '/:id',
+  isValidId,
+  validateBody(movieAddSchema),
+  ctrlWrapper(updateMovieController),
+);
 
-moviesRouter.patch('/:id', isValidId, ctrlWrapper(patchMovieController));
+moviesRouter.patch(
+  '/:id',
+  isValidId,
+  validateBody(movieUpdateSchema),
+  ctrlWrapper(patchMovieController),
+);
 
 moviesRouter.delete('/:id', isValidId, ctrlWrapper(deleteMovieController));
 export default moviesRouter;

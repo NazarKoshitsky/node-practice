@@ -7,3 +7,10 @@ export const movieAddSchema = Joi.object({
   type: Joi.string().valid(...typeList),
   releaseYear: Joi.string().pattern(releaseYearRegexp).required(),
 });
+
+export const movieUpdateSchema = Joi.object({
+  title: Joi.string(),
+  dorector: Joi.string(),
+  type: Joi.string().valid(...typeList),
+  releaseYear: Joi.string().pattern(releaseYearRegexp),
+});
