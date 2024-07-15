@@ -9,18 +9,21 @@ import {
 
 import parsePaginationParams from '../utils/parsePaginationParams.js';
 import parseSortParams from '../utils/parseSortParams.js';
+import parseMovieFilterParams from '../utils/parseMovieFilterParams.js';
 
 import { movieFieldList } from '../constants/movies-constants.js';
 
 export const getAllMoviesController = async (req, res) => {
-  const { page, perPage } = parsePaginationParams(req.query);
-
-  const { sortBy, sortOrder } = parseSortParams(req.query, movieFieldList);
+  const { query } = req;
+  const { page, perPage } = parsePaginationParams(query);
+  const { sortBy, sortOrder } = parseSortParams(query, movieFieldList);
+  const filter = parseMovieFilterParams(query);
   const data = await getMovies({
     page,
     perPage,
     sortBy,
     sortOrder,
+    filter,
   });
 
   res.json({

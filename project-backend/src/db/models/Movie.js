@@ -20,6 +20,10 @@ const movieShema = new Schema(
       enum: typeList,
       default: 'film',
     },
+    favorite: {
+      type: Boolean,
+      default: false,
+    },
     releaseYear: {
       type: String,
       match: releaseYearRegexp,
