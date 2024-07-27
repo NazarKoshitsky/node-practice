@@ -10,6 +10,8 @@ import {
 import ctrlWrapper from '../utils/ctrlWrapper.js';
 import validateBody from '../utils/validateBody.js';
 
+import authenticate from '../middlewares/authenticate.js';
+
 import isValidId from '../middlewares/isValidId.js';
 import {
   movieAddSchema,
@@ -17,6 +19,8 @@ import {
 } from '../validation/movie-schemas.js';
 
 const moviesRouter = express.Router();
+
+moviesRouter.use(authenticate);
 
 moviesRouter.get('/', ctrlWrapper(getAllMoviesController));
 

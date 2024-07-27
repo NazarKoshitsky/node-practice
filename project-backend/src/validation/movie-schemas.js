@@ -3,7 +3,7 @@ import { typeList, releaseYearRegexp } from '../constants/movies-constants.js';
 
 export const movieAddSchema = Joi.object({
   title: Joi.string().required(),
-  dorector: Joi.string().required(),
+  director: Joi.string().required(),
   favorite: Joi.boolean(),
   type: Joi.string().valid(...typeList),
   releaseYear: Joi.string().pattern(releaseYearRegexp).required(),
@@ -11,7 +11,7 @@ export const movieAddSchema = Joi.object({
 
 export const movieUpdateSchema = Joi.object({
   title: Joi.string(),
-  dorector: Joi.string(),
+  director: Joi.string(),
   favorite: Joi.boolean(),
   type: Joi.string().valid(...typeList),
   releaseYear: Joi.string().pattern(releaseYearRegexp),

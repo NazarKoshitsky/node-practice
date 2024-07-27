@@ -1,7 +1,7 @@
 import createHttpError from 'http-errors';
 import {
   getMovies,
-  getMovieById,
+  getMovie,
   addMovie,
   upsertMovie,
   deleteMovie,
@@ -14,10 +14,12 @@ import parseMovieFilterParams from '../utils/parseMovieFilterParams.js';
 import { movieFieldList } from '../constants/movies-constants.js';
 
 export const getAllMoviesController = async (req, res) => {
+  const { _id: userId } = req.user;
   const { query } = req;
   const { page, perPage } = parsePaginationParams(query);
   const { sortBy, sortOrder } = parseSortParams(query, movieFieldList);
-  const filter = parseMovieFilterParams(query);
+  const filter = { ...parseMovieFilterParams(query), userId };
+
   const data = await getMovies({
     page,
     perPage,
@@ -34,9 +36,10 @@ export const getAllMoviesController = async (req, res) => {
 };
 
 export const getMovieByIdController = async (req, res) => {
+  const { _id: userId } = req.user;
   const { id } = req.params;
 
-  const data = await getMovieById(id);
+  const data = await getMovie({ _id: id, userId });
 
   if (!data) {
     throw createHttpError(404, `Movie with id=${id} not found`);
@@ -49,7 +52,9 @@ export const getMovieByIdController = async (req, res) => {
 };
 
 export const addMovieController = async (req, res) => {
-  const data = await addMovie(req.body);
+  const { _id: userId } = req.user;
+  const data = await addMovie({ ...req.body, userId });
+
   res.status(201).json({
     status: 201,
     message: 'Success add movie',
@@ -59,7 +64,11 @@ export const addMovieController = async (req, res) => {
 
 export const updateMovieController = async (req, res) => {
   const { id } = req.params;
-  const data = await upsertMovie({ _id: id }, req.body, { upsert: true });
+  const { _id: userId } = req.user;
+
+  const data = await upsertMovie({ _id: id, userId }, req.body, {
+    upsert: true,
+  });
 
   const status = data.isNew ? 201 : 200;
   const message = data.isNew ? 'Movie success add' : 'Movie update success';
@@ -73,7 +82,9 @@ export const updateMovieController = async (req, res) => {
 
 export const patchMovieController = async (req, res) => {
   const { id } = req.params;
-  const result = await upsertMovie({ _id: id }, req.body);
+  const { _id: userId } = req.user;
+
+  const result = await upsertMovie({ _id: id, userId }, req.body);
 
   if (!result) {
     throw createHttpError(404, `Movie with id=${id} not found`);
@@ -88,7 +99,8 @@ export const patchMovieController = async (req, res) => {
 
 export const deleteMovieController = async (req, res) => {
   const { id } = req.params;
-  const result = await deleteMovie({ _id: id });
+  const { _id: userId } = req.user;
+  const result = await deleteMovie({ _id: id, userId });
 
   if (!result) {
     throw createHttpError(404, `Movie with id=${id} not found`);

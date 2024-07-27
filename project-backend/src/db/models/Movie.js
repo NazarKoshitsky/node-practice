@@ -29,6 +29,11 @@ const movieShema = new Schema(
       match: releaseYearRegexp,
       required: true,
     },
+    userId: {
+      type: Schema.Types.ObjectId,
+      ref: 'user',
+      required: true,
+    },
   },
   { versionKey: false, timestamps: true },
 );
